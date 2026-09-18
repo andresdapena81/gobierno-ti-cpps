@@ -1,0 +1,13 @@
+# Gemelo digital · backend
+#
+# Sólo dos dependencias para el modo por defecto. La física, el modelo, los
+# residuales y el what-if son Python puro de la biblioteca estándar: se
+# pueden leer enteros sin conocer ninguna librería de terceros, que es el
+# objetivo del laboratorio.
+
+fastapi>=0.110
+uvicorn[standard]>=0.27
+
+# Sólo para el modo --mqtt (laboratorio de la S11 contra Mosquitto real).
+# El resto funciona sin esto.
+# paho-mqtt>=2.0

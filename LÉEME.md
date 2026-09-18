@@ -1,0 +1,102 @@
+# GOBIERNO DE TI Y SISTEMAS CIBER-FÍSICOS DE PRODUCCIÓN · 2026-2
+## Material del curso — índice de entregables
+
+Universidad de San Buenaventura · Sede Bello · Campus Medellín
+Docente: Jorge Andrés Dapena — MSc. · Clase 6827 · ID Curso 027227
+
+---
+
+## 1. Qué hay aquí
+
+| Carpeta | Contenido |
+|---|---|
+| `presentaciones/` | **16 presentaciones teóricas (.pptx)**, una por sesión, más el deck de la guía del laboratorio. Contenido magistral, diseño brutalista/terminal (idéntico formato a la muestra). |
+| `ejercicios/` | **16 guías de ejercicios (.pdf)**, una por sesión. Taller/laboratorio: objetivos, materiales, pasos, entregable y rúbrica. |
+| `gemelo-digital/` | **Laboratorio ejecutable** del Lab 7 (S12): simulador de proceso en Python, gemelo digital y front en React. Ver su propio `LÉEME.md`. |
+| `build/` | Motor generador (código fuente). Permite regenerar todo el material. |
+| `SYLLABUS.md` | Microcurrículo detallado de las 16 semanas. |
+| `Muestra/` | Material de referencia de formato que se usó como base. |
+
+## 2. Las 16 sesiones
+
+| # | Presentación | Slides | Unidad |
+|---|---|---:|---|
+| S01 | Fundamentos de Gobierno de TI | 52 | U1 · Gobierno de TI |
+| S02 | ISO/IEC 38500 | 53 | U1 |
+| S03 | COBIT 2019 I — Sistema y cascada | 50 | U1 |
+| S04 | COBIT 2019 II — Diseño a medida | 48 | U1 |
+| S05 | Valor, Riesgo, Recursos e ITIL 4 | 47 | U1 |
+| S06 | Industria 4.0 y CPS | 51 | U2 · Sistemas ciber-físicos |
+| S07 | ISA-95 y la pirámide | 48 | U2 |
+| S08 | RAMI 4.0 y el AAS | 47 | U2 |
+| S09 | IIoT, Edge y Nube | 46 | U2 |
+| S10 | OPC UA y protocolos | 46 | U3 · Convergencia IT/OT |
+| S11 | MQTT, Sparkplug B y UNS | 45 | U3 |
+| S12 | Gemelos digitales | 44 | U3 |
+| S13 | Gobierno de datos y OEE | 45 | U3 |
+| S14 | Ciberseguridad industrial I | 45 | U4 · Riesgo ciber-físico |
+| S15 | Ciberseguridad industrial II | 45 | U4 |
+| S16 | Caso de negocio y hoja de ruta | 47 | U4 |
+| LAB | Gemelo digital — guía de presentación | 49 | U3 · acompaña a S12 |
+
+Cada presentación incluye **notas del ponente** (guion de clase) en cada diapositiva.
+
+## 3. Cómo regenerar el material
+
+Requisitos: Node.js (con `pptxgenjs`) y Python (con `reportlab`).
+
+**Presentaciones** (todas o algunas):
+```bash
+cd build
+node render.js          # todas las 16
+node render.js 3 7      # solo S03 y S07
+```
+
+**Guías de ejercicios (PDF):**
+```bash
+cd build
+python make_pdfs.py           # todas
+python make_pdfs.py 10 11     # solo S10 y S11
+```
+
+**Deck del laboratorio del gemelo digital** (guía para presentarlo):
+```bash
+cd build
+node render-lab.js
+```
+
+**Chequeo de desbordes de texto** (antes de renderizar):
+```bash
+cd build
+node _chequeo_desborde.js sessions/s02.js
+```
+
+### Estructura del motor (`build/`)
+
+| Archivo | Función |
+|---|---|
+| `deck_lib.js` | Sistema de diseño: paleta, tipografías y todos los tipos de diapositiva. Auto-numera los kickers `// NN`. |
+| `meta.js` | Metadatos comunes y registro de las 16 sesiones. |
+| `render.js` | Renderiza las 16 presentaciones. |
+| `render-lab.js` | Renderiza el deck del laboratorio del gemelo digital. |
+| `sessions/sNN.js` | Contenido de cada sesión (datos declarativos; editar aquí para cambiar contenido). |
+| `sessions/lab-gemelo.js` | Contenido del deck del laboratorio. |
+| `_chequeo_desborde.js` | Detecta textos que exceden el ancho de su tipo de diapositiva. |
+| `make_pdfs.py` | Renderiza las guías de ejercicios en PDF. |
+| `exercises_data.py` | Contenido de los 16 talleres (editar aquí). |
+
+Para **cambiar el contenido** de una sesión, editar su archivo `sessions/sNN.js` (presentación) o el bloque correspondiente en `exercises_data.py` (ejercicios) y volver a renderizar.
+
+## 4. Nota sobre la QA visual
+
+El material se valida estructuralmente (esquema OOXML, relaciones, contenido) y las 17 presentaciones pasan la validación.
+
+**LibreOffice ya está instalado**, así que la QA visual con renderizado de imágenes sí es posible. Para revisar un mazo página por página:
+
+```bash
+soffice --headless --convert-to pdf --outdir /ruta/salida "presentaciones/S02 - ISO IEC 38500.pptx"
+```
+
+y luego renderizar el PDF a imágenes con PyMuPDF (`import fitz`), que está disponible en el Python del equipo.
+
+> **Aviso conocido.** El chequeo de desbordes detecta un patrón preexistente en varias sesiones: las cifras de las diapositivas `callouts` se dibujan en Arial Black a 38 pt y sólo caben unos 9 caracteres por caja. Valores como `RESPONSABILIDAD` (S12, S16) o `PILOT PURGATORY` (S16) envuelven a dos líneas y pueden rozar la etiqueta inferior. No es un error de validación y no se ha corregido; conviene revisarlo si esas sesiones se van a proyectar.

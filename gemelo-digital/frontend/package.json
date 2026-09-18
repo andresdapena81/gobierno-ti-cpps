@@ -1,0 +1,20 @@
+{
+  "name": "gemelo-digital-front",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Front del gemelo digital de línea de llenado — USB Bello, Gobierno de TI y CPPS",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
+  }
+}

@@ -1,0 +1,22 @@
+✓ LAB - Gemelo digital (guia de presentacion).pptx  0 problemas
+✓ S01 - Fundamentos de Gobierno de TI.pptx  0 problemas
+✓ S02 - ISO IEC 38500.pptx  0 problemas
+✓ S03 - COBIT 2019 I.pptx  0 problemas
+✓ S04 - COBIT 2019 II.pptx  0 problemas
+✗ S05 - Valor Riesgo e ITIL 4.pptx  (1 problema(s)):
+  pág 41  SE PISAN (81%): "SABEMOS" / "cómo gobernar la tecno"
+✓ S06 - Industria 4.0 y CPS.pptx  0 problemas
+✓ S07 - ISA-95 y la piramide.pptx  0 problemas
+✓ S08 - RAMI 4.0 y AAS.pptx  0 problemas
+✓ S09 - IIoT Edge y Nube.pptx  0 problemas
+✓ S10 - OPC UA y protocolos.pptx  0 problemas
+✓ S11 - MQTT Sparkplug y UNS.pptx  0 problemas
+✓ S12 - Gemelos digitales.pptx  0 problemas
+✓ S13 - Gobierno de datos y OEE.pptx  0 problemas
+✓ S14 - Ciberseguridad industrial I.pptx  0 problemas
+✓ S15 - Ciberseguridad industrial II.pptx  0 problemas
+✓ S16 - Caso de negocio y hoja de ruta.pptx  0 problemas
+✓ S01 - Taller (PPTX) - Construye tu empresa.pptx  0 problemas
+✓ S06 - Actividad (PPTX) - Diagnostico 4.0.pptx  0 problemas
+
+TOTAL problemas: 1
