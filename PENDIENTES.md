@@ -6,9 +6,10 @@ Estado del material vs. el estándar. ✅ cumple · 🟡 parcial · 🔴 falta.
 - 🟡 **Pregunta de verificación por bloque + agenda con tiempo real** en los decks. Hoy hay notas
   del ponente en todas las láminas, pero no la pregunta de cierre sistemática. → Añadir un tipo de
   lámina `check` y una agenda temporizada en `build/deck_lib.js`, y aplicarlo a las 16 sesiones.
-- 🟡 **Guías de lab a nivel comando+salida+errores.** Varias guías traen objetivos/pasos/rúbrica,
-  pero falta el detalle "comando exacto → salida esperada → cómo sé que funcionó" + tabla de errores.
-  El gemelo digital (S12) es el modelo a seguir. → Reescribir S05/S07/S09/S10/S11/S13/S15 en `exercises_data.py`.
+- 🟡 **Guías de lab a nivel comando+salida+errores.** `make_pdfs.py` ya soporta secciones opcionales
+  (`preparacion`, `pasos_detallados` con Ejemplo + Resultado esperado, `ejemplo` con tabla trabajada,
+  `errores`, `preguntas`, `entrega_checklist`). **S07 (ISA-95) ya está a este nivel** y es la plantilla
+  a replicar. → Falta subir a ese nivel S05/S09/S10/S11/S13/S15 en `exercises_data.py`.
 - ✅ **Código de laboratorio con pruebas automáticas** (solución + andamiaje con TODO) para S10 OPC UA,
   S11 MQTT y S13 OEE, más el gemelo digital. Ver `build/labs/` (patrón `IMPL=solucion|andamiaje pytest`).
 - ✅ **Modelo de evaluación por casos, proyectos y reflexión** (sin quizzes ni selección múltiple).

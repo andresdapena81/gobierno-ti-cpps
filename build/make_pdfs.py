@@ -141,6 +141,57 @@ def kvbox(pairs):
                            ("BOTTOMPADDING",(0,0),(-1,-1),4), ("LEFTPADDING",(0,0),(-1,-1),6)]))
     return t
 
+def stepblocks(items):
+    """Pasos detallados: cada uno con título, descripción, ejemplo y resultado esperado.
+    Cada item es un dict {t, d, ej?, esperado?}."""
+    st_t = ParagraphStyle("stpt", fontName=BOLD, fontSize=10, textColor=INK, leading=13, spaceAfter=1)
+    st_d = ParagraphStyle("stpd", fontName=BODY, fontSize=9.5, textColor=INK, leading=13, spaceAfter=1)
+    st_ej = ParagraphStyle("stpej", fontName=BODY, fontSize=9, textColor=CYAN, leading=12, spaceAfter=1)
+    st_ok = ParagraphStyle("stpok", fontName=BOLD, fontSize=9, textColor=LIME, leading=12)
+    data = []
+    for i, x in enumerate(items, 1):
+        num = Paragraph("<font name='Courier-Bold' color='#5B8A00'>%02d</font>" % i, st_t)
+        cell = [Paragraph(esc(x["t"]), st_t), Paragraph(esc(x["d"]), st_d)]
+        if x.get("ej"):
+            cell.append(Paragraph("<b>Ejemplo:</b> " + esc(x["ej"]), st_ej))
+        if x.get("esperado"):
+            cell.append(Paragraph("&#10003; <b>Resultado esperado:</b> " + esc(x["esperado"]), st_ok))
+        data.append([num, cell])
+    t = Table(data, colWidths=[1.0*cm, None])
+    t.setStyle(TableStyle([("VALIGN",(0,0),(-1,-1),"TOP"), ("TOPPADDING",(0,0),(-1,-1),5),
+                           ("BOTTOMPADDING",(0,0),(-1,-1),5), ("LEFTPADDING",(0,0),(0,-1),0),
+                           ("LINEBELOW",(0,0),(-1,-2),0.4, LINE)]))
+    return t
+
+def _cell(txt, sty):
+    return Paragraph(esc(txt).replace("\n", "<br/>"), sty)
+
+def datatable(cols, rows, widths=None):
+    """Tabla genérica con encabezado oscuro (para ejemplo trabajado / errores).
+    widths: números = cm; None = automático."""
+    data = [[_cell(c, S["cellh"]) for c in cols]]
+    for r in rows:
+        data.append([_cell(c, S["cell"]) for c in r])
+    cw = None
+    if widths:
+        cw = [(w*cm if isinstance(w, (int, float)) else None) for w in widths]
+    t = Table(data, colWidths=cw or ([None] * len(cols)))
+    ts = [("BACKGROUND",(0,0),(-1,0), DARK), ("GRID",(0,0),(-1,-1),0.5, LINE),
+          ("VALIGN",(0,0),(-1,-1),"TOP"), ("TOPPADDING",(0,0),(-1,-1),5),
+          ("BOTTOMPADDING",(0,0),(-1,-1),5), ("LEFTPADDING",(0,0),(-1,-1),6),
+          ("RIGHTPADDING",(0,0),(-1,-1),6)]
+    for i in range(1, len(data)):
+        if i % 2 == 0:
+            ts.append(("BACKGROUND",(0,i),(-1,i), BG2))
+    t.setStyle(TableStyle(ts))
+    return t
+
+def checklist(items):
+    st = ParagraphStyle("chk", fontName=BODY, fontSize=10, textColor=INK, leading=15, spaceAfter=1)
+    return ListFlowable(
+        [ListItem(Paragraph(esc(x), st), value="☐", leftIndent=12) for x in items],
+        bulletType="bullet", bulletColor=INK, start="☐", leftIndent=10)
+
 def build(sess):
     fn = os.path.join(OUT, "S%02d - Ejercicios - %s.pdf" % (sess["n"], sess["file"]))
     doc = ExDoc(fn, sess)
@@ -164,15 +215,45 @@ def build(sess):
     story.append(h2("Materiales y herramientas"))
     story.append(bullets(sess["materiales"]))
 
+    if sess.get("preparacion"):
+        story.append(h2("Preparación (desde cero)"))
+        story.append(bullets(sess["preparacion"]))
+
     story.append(h2("Actividades paso a paso"))
-    story.append(steps(sess["pasos"]))
+    if sess.get("pasos_detallados"):
+        story.append(stepblocks(sess["pasos_detallados"]))
+    else:
+        story.append(steps(sess["pasos"]))
 
     if sess.get("code"):
         story.append(Spacer(1, 6))
         story.append(codeblock(sess["code"]))
 
+    if sess.get("ejemplo"):
+        ej = sess["ejemplo"]
+        story.append(h2(ej.get("titulo", "Ejemplo trabajado completo")))
+        if ej.get("intro"):
+            story.append(Paragraph(esc(ej["intro"]), S["body"]))
+            story.append(Spacer(1, 4))
+        story.append(datatable(ej["cols"], ej["filas"], ej.get("widths")))
+        if ej.get("nota"):
+            story.append(Spacer(1, 3))
+            story.append(Paragraph(esc(ej["nota"]), S["muted"]))
+
+    if sess.get("errores"):
+        story.append(h2("Errores frecuentes"))
+        story.append(datatable(["Síntoma / error típico", "Cómo lo detecto y lo corrijo"],
+                               sess["errores"], widths=[6.2, None]))
+
     story.append(h2("Entregable"))
     story.append(Paragraph(esc(sess["entregable"]), S["body"]))
+    if sess.get("entrega_checklist"):
+        story.append(Spacer(1, 4))
+        story.append(checklist(sess["entrega_checklist"]))
+
+    if sess.get("preguntas"):
+        story.append(h2("Preguntas que exigen mirar el artefacto"))
+        story.append(bullets(sess["preguntas"]))
 
     story.append(h2("Rúbrica de evaluación"))
     story.append(rubric(sess["rubrica"]))
